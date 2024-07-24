@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Qualifications Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            background-image: url('/static/iStock-brain.2500.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .file-upload {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .error {
+            color: red;
+            background-color: #ffeeee;
+        }
+        .success {
+            color: green;
+            background-color: #eeffee;
+        }
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .select-group select {
+            width: 100%;
+        }
+        .select-group-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 10px 0;
+        }
+        .arrow-button {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .scrollable-select {
+           overflow: auto;
+           white-space: nowrap;
+        }
+        .scrollable-select option {
+           white-space: normal;
+           word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Filters</h1>
+        <form id="academicForm" enctype="multipart/form-data">
+            <div class="select-group">
+                <label for="detailType">Select search Type:</label>
+                <select id="detailType" name="detailType">
+                    <option value="">Select a type</option>
+                    <option value="subjectId">Subject ID</option>
+                    <option value="pathScanFile">Path Scan File</option>
+                </select>
+                <h2>Paste the details according to the search type:</h2>
+                <textarea id="additionalDetails" name="additionalDetails" rows="5" placeholder="Paste additional details or upload a file..." oninput="clearFileInput()"></textarea>
+                <div class="file-upload">
+                    <i class="fas fa-paperclip" onclick="document.getElementById('fileInput').click();"></i>
+                    <input type="file" id="fileInput" name="file" accept=".pdf,.doc,.docx,.csv,.xlsx,.xls" onchange="handleFileChange(this)">
+                </div>
+            </div>
+            <div class="select-group">
+                <h2>Options to Choose</h2>
+                <label for="categoryOptions">Category</label>
+                <select id="categoryOptions" name="categoryOptions">
+                    <option value="">Select a category</option>
+                    <option value="Most_common_questions">Most common questions</option>
+                    <option value="Patient_details_at_the_time_of_scan">Patient details at the time of scan</option>
+                    <option value="דמוגרפי כללי">שאלון דמוגרפי כללי</option>
+                    <option value="שפה ושיוך">שאלון שפה ושיוך</option>
+                    <option value="מצב משפחתי">שאלון מצב משפחתי</option>
+                    <option value="השכלה ומקצוע">שאלון השכלה ומקצוע</option>
+                    <option value="תחביבים והעדפות">שאלון תחביבים והעדפות</option>
+                    <option value="שאלון שינה"> שאלון שינה</option>
+                    <option value="מצב בריאותי">שאלון  מצב בריאותי</option>
+                    <option value="שאלון אישיות"> שאלון אישיות</option>
+                    <option value="שאלון פסיכומטרי">שאלון פסיכומטרי</option>
+                    <option value="שאלון חרדה"> שאלון חרדה OASIS</option>
+                    <option value="שאלון פוביות">שאלון פוביות</option>
+                    <option value="שאלון צאצאים שורדי שואה">שאלון צאצאים שורדי שואה</option>
+                    <option value="אורח חיים ועמדות">שאלון אורח חיים ועמדות</option>
+                    <option value="שאלון מוזיקה"> שאלון מוזיקה</option>
+                    <option value="שאלון תכנות">שאלון תכנות</option>
+                    <option value="שאלון סמארטפון">שאלון סמארטפון</option>
+                    <option value="שאלון דיכאון וחרדה">שאלון דיכאון וחרדה GAD</option>
+                    <option value="שאלון פוסט טראומה">שאלון פוסט טראומה GAD</option>
+                    <option value="שאלון שבעה באוקטובר">שאלון שבעה באוקטובר</option>
+                    <option value="תחביבים והעדפות">שאלון תחביבים והעדפות</option>
+                    <option value="אורח חיים ועמדות">שאלון אורח חיים ועמדות</option>
+                    <option value="שאלות סיום">שאלון שאלות סיום</option>
+                    <option value="All the questions">כל השאלות מכל השאלונים</option>
+                </select>
+                <label for="questionOptions">Questions from the category</label>
+                <div class="select-group">
+                    <select id="questionOptions" name="questionOptions[]" multiple style="height: 200px;" class="scrollable-select"></select>
+                    <div class="select-group-buttons">
+                        <button type="button" id="addQuestion" class="arrow-button">&#9660;</button>
+                        <button type="button" id="removeQuestion" class="arrow-button">&#9650;</button>
+                    </div>
+                    <label>Selected questions
+                       <select id="selectedQuestions" name="selectedQuestions[]" multiple style="height: 200px;" class="scrollable-select"></select>
+                    </label>
+                </div>
+            </div>
+            <button type="submit">Submit Qualifications</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function handleFileChange(input) {
+            var file = input.files[0];
+            if (file) {
+                document.getElementById('additionalDetails').value = `Uploaded file: ${file.name}`;
+            }
+        }
+
+        function clearFileInput() {
+            document.getElementById('fileInput').value = '';
+        }
+
+        function updateSelectedQuestionNumbers() {
+            $('#selectedQuestions option').each(function(index) {
+                var text = $(this).text();
+                var newText = (index + 1) + '. ' + text.substring(text.indexOf('.') + 2);
+                $(this).text(newText);
+            });
+        }
+
+        function loadQuestionsForCategory(selectedCategory) {
+            if (selectedCategory) {
+                $.ajax({
+                    url: '/get_questions',
+                    type: 'GET',
+                    data: { category: selectedCategory },
+                    success: function(response) {
+                        if (response.questions) {
+                            var questionSelect = $('#questionOptions');
+                            questionSelect.empty();
+                            response.questions.forEach(function(question, index) {
+                                var questionId = question[0];
+                                var questionText = question[1];
+                                questionSelect.append($('<option>', {
+                                    value: questionId,
+                                    text: (index + 1) + '. ' + questionText
+                                }));
+                            });
+                        } else if (response.error) {
+                            $('#result').html('<p class="error">Error: ' + response.error + '</p>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#result').html('<p class="error">An error occurred while fetching questions.</p>');
+                    }
+                });
+            } else {
+                $('#questionOptions').empty();
+            }
+        }
+
+        $('#categoryOptions').change(function() {
+            loadQuestionsForCategory($(this).val());
+        });
+
+        $('#addQuestion').click(function() {
+            $('#questionOptions option:selected').each(function() {
+                var selectedOption = $(this);
+                var optionValue = selectedOption.val();
+                var optionText = selectedOption.text();
+
+                if ($('#selectedQuestions option[value="' + optionValue + '"]').length === 0) {
+                    $('#selectedQuestions').append($('<option>', {
+                        value: optionValue,
+                        text: optionText
+                    }));
+                }
+            });
+            updateSelectedQuestionNumbers();
+        });
+
+        $('#removeQuestion').click(function() {
+            $('#selectedQuestions option:selected').remove();
+            updateSelectedQuestionNumbers();
+        });
+
+        $('#academicForm').submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            var selectedQuestions = [];
+            $('#selectedQuestions option').each(function() {
+                selectedQuestions.push($(this).val());
+            });
+            formData.append('selectedQuestions', JSON.stringify(selectedQuestions));
+
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(response, status, xhr) {
+                    var contentType = xhr.getResponseHeader('content-type');
+                    if (contentType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                        var blob = new Blob([response], { type: contentType });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'results.xlsx';
+                        link.click();
+                        $('#result').html('<p class="success">Excel file generated and downloaded successfully.</p>');
+                    } else {
+                        var reader = new FileReader();
+                        reader.onload = function() {
+                            var jsonResponse = JSON.parse(reader.result);
+                            if (jsonResponse.error) {
+                                $('#result').html('<p class="error">Error: ' + jsonResponse.error + '</p>');
+                            } else {
+                                $('#result').html('<p class="success">Upload successful. ' + jsonResponse.message + '</p>');
+                            }
+                        };
+                        reader.readAsText(response);
+                    }
+                },
+                error: function() {
+                    $('#result').html('<p class="error">An error occurred during upload.</p>');
+                }
+            });
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function() {
+            handleFileChange(this);
+        });
+
+        document.getElementById('additionalDetails').addEventListener('input', clearFileInput);
+    });
+</script>
+</body>
+</html>
